@@ -8,7 +8,20 @@ Imports:
     config,
     golem,
     shiny,
-    hamiltonCovid19 (>= 0.0.0.9000)
+    hamiltonCovid19 (>= 0.0.0.9000),
+    magrittr,
+    bs4Dash,
+    dplyr,
+    fresh,
+    ggplot2,
+    plotly,
+    purrr,
+    scales,
+    shinyjs,
+    stringr,
+    tibble,
+    tidyr,
+    tidyselect
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
@@ -16,3 +29,5 @@ Remotes:
     hamilton-institute/hamiltonCovid19
 URL: https://github.com/curso-r/hamiltonSeirOver65
 BugReports: https://github.com/curso-r/hamiltonSeirOver65/issues
+Depends: 
+    R (>= 2.10)
