@@ -12,23 +12,8 @@ app_server <- function( input, output, session ) {
 
   dataInput <- reactive({
     # Load in latest data
-    latest = utils::read.csv("https://opendata.arcgis.com/datasets/d8eb52d56273413b84b0187a4e9117be_0.csv")
-    data_use = latest %>%
-      dplyr::mutate(Date = as.Date(Date)) %>%
-      dplyr::select(Date, TotalCovidDeaths, Aged1, 
-             Aged1to4, Aged5to14, Aged15to24, Aged25to34, Aged35to44, 
-             Aged45to54, Aged55to64, Aged65up) %>% 
-      dplyr::mutate(`Under 65s` = Aged1+ 
-               Aged1to4+ Aged5to14+ Aged15to24+ Aged25to34+ Aged35to44+ 
-               Aged45to54+ Aged55to64,
-             `Over 65s` = Aged65up,
-             `Total` = TotalCovidDeaths) %>% 
-      dplyr::select(Date, `Under 65s`, `Over 65s`, `Total`) %>% 
-      dplyr::mutate(
-        dplyr::across( is.numeric, ~(.x - dplyr::lag(.x)))
-      ) %>% 
-      dplyr::filter(Date >= start_date()) %>%
-      tidyr::pivot_longer(names_to = 'Age group', values_to = 'Value', -Date)
+    data_use = hamiltonSeirOver65::latest_covid %>% 
+      filter(Date >= start_date())
   })
 
   observeEvent(input$button, {
@@ -131,22 +116,22 @@ app_server <- function( input, output, session ) {
                                                    head(YR_median, -dead_shift)*input$dead_0/100))
 
     # Tidy up into one data frame
-    final = dplyr::left_join(YR_final, OR_final, by = "Date") %>%
-      tidyr::pivot_longer(names_to = 'Type', values_to = 'Count', -Date) 
-    final_twocols = as.matrix(stringr::str_split(final$Type, 'XXX', simplify = TRUE))
+    final = dplyr::left_join(YR_final, OR_final, by = "Date") %>% 
+      tidyr::pivot_longer(names_to = 'Type', values_to = 'Count', -Date)
+    final_twocols = as.matrix(stringr::str_split(final$Type, 'XXX', simplify = TRUE))    
     final$`Age group` = final_twocols[,1]
     final$Type = final_twocols[,2]
-    final2 = final %>%
-      tidyr::pivot_wider(names_from = "Type", values_from = "Count") %>%
-      dplyr::mutate(dplyr::across(tidyselect:::where(is.numeric), round, 0)) %>%
+    final2 = final %>% 
+      tidyr::pivot_wider(names_from = "Type", values_from = "Count") %>% 
+      dplyr::mutate(dplyr::across(tidyselect:::where(is.numeric), round, 0)) %>% 
       tidyr::pivot_longer(names_to = "Type", values_to = "Count", -c(Date, `Age group`))
-    final2_twocols = as.matrix(stringr::str_split(final2$Type, ' - ', simplify = TRUE))
+    final2_twocols = as.matrix(stringr::str_split(final2$Type, ' - ', simplify = TRUE))    
     final2$Type = final2_twocols[,1]
     final2$Est = final2_twocols[,2]
-    final2 = final2 %>%
+    final2 = final2 %>% 
       tidyr::pivot_wider(names_from = "Est", values_from = "Count")
     final2$Type = factor(final2$Type, levels = c('Infected', 'Dead'), ordered = TRUE)
-
+    
     # This caused a load of pain but replaced three of the above lines
     #   tidyr::separate(Type, c("Age group", "Type"), sep = "XXX") %>%
 
@@ -154,7 +139,7 @@ app_server <- function( input, output, session ) {
       ggplot2::geom_line(ggplot2::aes(y = `Value`)) +
       #geom_ribbon(aes(ymin = `low est`, ymax = `high est`, fill = `Age group`), alpha = 0.1) +
       ggplot2::labs(x = "Date", title = "Infected/dead per day", y = NULL) +
-      ggplot2::scale_x_date(date_breaks = "4 weeks", date_labels = "%d-%b") +
+      ggplot2::scale_x_date( date_labels = "%d-%b") +
       ggplot2::scale_y_continuous(expand = c(0, 0), labels = scales::comma) +
       ggplot2::theme_bw() +
       ggplot2::theme(
