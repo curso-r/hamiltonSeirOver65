@@ -16,6 +16,7 @@
 ## Dependencies ----
 ## Add one line by package you want to add as dependency
 usethis::use_package( "thinkr" )
+usethis::use_dev_package("hamiltonCovid19")
 
 ## Add modules ----
 ## Create a module infrastructure in R/
@@ -25,7 +26,7 @@ golem::add_module( name = "name_of_module2" ) # Name of the module
 ## Add helper functions ----
 ## Creates ftc_* and utils_*
 golem::add_fct( "helpers" ) 
-golem::add_utils( "helpers" )
+golem::add_utils( "text" )
 
 ## External resources
 ## Creates .js and .css files at inst/app/www
