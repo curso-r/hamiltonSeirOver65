@@ -8,7 +8,6 @@ Imports:
     config,
     golem,
     shiny,
-    hamiltonCovid19 (>= 0.0.0.9000),
     magrittr,
     bs4Dash,
     dplyr,
@@ -21,12 +20,14 @@ Imports:
     stringr,
     tibble,
     tidyr,
-    tidyselect
+    tidyselect,
+    pkgload,
+    hamiltonThemes (>= 0.0.0.9000)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
-Remotes: 
-    hamilton-institute/hamiltonCovid19
+Remotes:  
+    hamilton-institute/hamiltonThemes
 URL: https://github.com/curso-r/hamiltonSeirOver65
 BugReports: https://github.com/curso-r/hamiltonSeirOver65/issues
 Depends: 

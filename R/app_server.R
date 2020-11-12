@@ -143,7 +143,7 @@ app_server <- function( input, output, session ) {
       ggplot2::scale_y_continuous(expand = c(0, 0), labels = scales::comma) +
       ggplot2::theme_bw() +
       ggplot2::theme(
-        strip.background = ggplot2::element_rect(fill = hamiltonCovid19::status_para_cor("primary")),
+        strip.background = ggplot2::element_rect(fill = hamiltonThemes:::distill_status_to_colour("primary")),
         strip.text = ggplot2::element_text(colour = "white")
       ) + 
       ggplot2::facet_wrap(~ Type , nrow = 2, scales = 'free_y')

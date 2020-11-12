@@ -13,7 +13,7 @@ app_ui <- function(request) {
       sidebar_collapsed = TRUE,
       sidebar_mini = FALSE,
       body = bs4Dash::bs4DashBody(
-        fresh::use_theme(hamiltonCovid19::theme_bs4Dash()),
+        hamiltonThemes::use_bs4Dash_distill_theme(),
         fluidRow(
           bs4Dash::column(
             width = 4,
@@ -79,7 +79,7 @@ app_ui <- function(request) {
             collapsible = FALSE,
             bs4Dash::bs4TabPanel(
               tabName = "Spread",
-              plotly::plotlyOutput("plot", height = 500) %>% hamiltonCovid19::with_load_spinner(),
+              plotly::plotlyOutput("plot", height = 500) %>% hamiltonThemes::distill_load_spinner(),
               checkboxInput("log_scale", "Log scale?", value = FALSE),
               checkboxInput("show_data", "Show data?", value = FALSE)
             ),
@@ -87,7 +87,8 @@ app_ui <- function(request) {
               tabName = "Assumptions",
               div(style = "color: black;", get_assumptions_text())
             )
-          )
+          ),
+          hamiltonThemes:::bs4dash_distill_footer()
         )
       )
     )
@@ -109,7 +110,7 @@ golem_add_external_resources <- function(){
   )
   
   add_resource_path(
-    "www", system.file("app/www", package = "hamiltonCovid19")
+    "distill", system.file("distill", package = "hamiltonThemes")
   )
  
   tags$head(
@@ -125,7 +126,7 @@ golem_add_external_resources <- function(){
   tags$head(
     favicon(),
     bundle_resources(
-      path = system.file("app/www", package = "hamiltonCovid19"),
+      path = system.file("distill", package = "hamiltonThemes"),
       app_title = 'hamiltonSeirOver65'
     )
   )

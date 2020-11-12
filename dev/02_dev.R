@@ -16,7 +16,7 @@
 ## Dependencies ----
 ## Add one line by package you want to add as dependency
 usethis::use_package( "thinkr" )
-usethis::use_dev_package("hamiltonCovid19")
+usethis::use_dev_package("hamiltonThemes")
 
 ## Add modules ----
 ## Create a module infrastructure in R/
