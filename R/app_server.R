@@ -13,7 +13,7 @@ app_server <- function( input, output, session ) {
   dataInput <- reactive({
     # Load in latest data
     data_use = hamiltonSeirOver65::latest_covid %>% 
-      filter(Date >= start_date())
+      dplyr::filter(Date >= start_date())
   })
 
   observeEvent(input$button, {
@@ -39,7 +39,7 @@ app_server <- function( input, output, session ) {
     num_sim = input$num_sim
     store = vector('list', num_sim)
     for (i in 1:num_sim) {
-      store[[i]] = hamiltonSeirOver65:::twoages(YS = input$pop_under_65, # Under 65s susceptible
+      store[[i]] = twoages(YS = input$pop_under_65, # Under 65s susceptible
                            YE = input$exp,
                            YI = input$inf,
                            YR = input$rec,
@@ -86,9 +86,9 @@ app_server <- function( input, output, session ) {
                       `Under 65sXXXInfected - Value` = YR_median,
                       `Under 65sXXXInfected - low est` = YR_low,
                       `Under 65sXXXInfected - high est` = YR_high,
-                      `Under 65sXXXDead - Value` = c(rep(0, dead_shift), head(YR_median, -dead_shift)*input$dead_0/100),
-                      `Under 65sXXXDead - low est` = c(rep(0, dead_shift), head(YR_low, -dead_shift)*input$dead_0/100),
-                      `Under 65sXXXDead - high est` = c(rep(0, dead_shift), head(YR_high, -dead_shift)*input$dead_0/100))
+                      `Under 65sXXXDead - Value` = c(rep(0, dead_shift), utils::head(YR_median, -dead_shift)*input$dead_0/100),
+                      `Under 65sXXXDead - low est` = c(rep(0, dead_shift), utils::head(YR_low, -dead_shift)*input$dead_0/100),
+                      `Under 65sXXXDead - high est` = c(rep(0, dead_shift), utils::head(YR_high, -dead_shift)*input$dead_0/100))
 
     # Now do the same thing for old infected
     OR_padded <- purrr::map_dfc(
@@ -109,11 +109,11 @@ app_server <- function( input, output, session ) {
                       `Over 65sXXXInfected - Value` = OR_median,
                       `Over 65sXXXInfected - low est` = OR_low,
                       `Over 65sXXXInfected - high est` = OR_high,
-                      `Over 65sXXXDead - Value` = c(rep(0, dead_shift), head(OR_median, -dead_shift)*input$dead_1/100),
-                      `Over 65sXXXDead - low est` = c(rep(0, dead_shift), head(OR_low, -dead_shift)*input$dead_1/100),
-                      `Over 65sXXXDead - high est` = c(rep(0, dead_shift), head(OR_high, -dead_shift)*input$dead_1/100),
-                      `TotalXXXDead - Value` = c(rep(0, dead_shift), head(OR_median, -dead_shift)*input$dead_1/100 +
-                                                   head(YR_median, -dead_shift)*input$dead_0/100))
+                      `Over 65sXXXDead - Value` = c(rep(0, dead_shift), utils::head(OR_median, -dead_shift)*input$dead_1/100),
+                      `Over 65sXXXDead - low est` = c(rep(0, dead_shift), utils::head(OR_low, -dead_shift)*input$dead_1/100),
+                      `Over 65sXXXDead - high est` = c(rep(0, dead_shift), utils::head(OR_high, -dead_shift)*input$dead_1/100),
+                      `TotalXXXDead - Value` = c(rep(0, dead_shift), utils::head(OR_median, -dead_shift)*input$dead_1/100 +
+                                                   utils::head(YR_median, -dead_shift)*input$dead_0/100))
 
     # Tidy up into one data frame
     final = dplyr::left_join(YR_final, OR_final, by = "Date") %>% 

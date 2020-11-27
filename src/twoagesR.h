@@ -34,7 +34,7 @@ struct simresult seir_model_erlang(double , double , double , const struct compa
 
 void freeresult(struct simresult res);
 
-SEXP twoages(SEXP YS, SEXP YE, SEXP YI, SEXP YR, SEXP OS, SEXP OE, SEXP OI, SEXP OR, SEXP YR0Y, SEXP YR0O, SEXP OR0Y, SEXP OR0O) {
+SEXP twoages_(SEXP YS, SEXP YE, SEXP YI, SEXP YR, SEXP OS, SEXP OE, SEXP OI, SEXP OR, SEXP YR0Y, SEXP YR0O, SEXP OR0Y, SEXP OR0O) {
 	struct compartments Y, O;
 	double R0[2][2];
 	static int initialised = 0;
