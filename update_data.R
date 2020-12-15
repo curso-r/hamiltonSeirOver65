@@ -1,0 +1,29 @@
+args <- commandArgs(trailingOnly = TRUE)
+
+deploy_app <- FALSE
+
+usethis::ui_todo("Checking update for latest_covid dataset...")
+source("data-raw/latest_covid.R")
+
+if(deploy_app) {
+  remotes::install_deps(dependencies = TRUE)
+  
+  rsconnect::setAccountInfo(
+    name = 'apmuhamilton',
+    token = args[1],
+    secret= args[2]
+  )
+  
+  files <- list.files('.')
+  files <- files[files != 'data-raw']
+  
+  rsconnect::deployApp(
+    appFiles = files,
+    appName = 'hamiltonSeirOver65',
+    forceUpdate = TRUE,
+    account = 'apmuhamilton'
+  )
+  
+} else {
+  message("Nothing to deploy.")
+}
