@@ -87,10 +87,10 @@ app_ui <- function(request) {
               tabName = "Assumptions",
               div(style = "color: black;", get_assumptions_text())
             )
-          ),
-          hamiltonThemes:::bs4dash_distill_footer()
+          )
         )
-      )
+      ),
+      footer = hamiltonThemes:::bs4dash_distill_footer()
     )
   )
 }
