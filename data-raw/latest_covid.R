@@ -17,6 +17,7 @@ latest = latest %>%
   ) %>%
   tidyr::pivot_longer(names_to = 'Age group', values_to = 'Value', -Date) 
 
+
 load("data/latest_covid.rda")
 
 if(identical(latest, latest_covid)) {
